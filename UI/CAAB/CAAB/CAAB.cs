@@ -13,10 +13,13 @@ namespace CAAB
     public partial class CAAB : Form
     {
         public ApplicationSettings AppSettings { get; set; }
+        public Business.BackgroundWorkers.CopyFilesWorker CopyFilesBackgroundWorker { get; set; }
+
         public CAAB()
         {
             InitializeComponent();
             AppSettings = ApplicationSettings.Instance;
+            CopyFilesBackgroundWorker = new Business.BackgroundWorkers.CopyFilesWorker();
         }
 
         protected override void OnLoad(EventArgs e)
@@ -57,18 +60,15 @@ namespace CAAB
             StatusProgressBar.Visible = true;
             StatusProgressBar.Value = 0;
 
-            BackgroundCopyWorker.WorkerReportsProgress = true;
-            BackgroundCopyWorker.WorkerSupportsCancellation = true;
-            BackgroundCopyWorker.ProgressChanged += BackgroundCopyWorkerOnProgressChanged;
-            BackgroundCopyWorker.DoWork += BackgroundCopyWorkerOnDoWork;
-            BackgroundCopyWorker.RunWorkerCompleted += BackgroundCopyWorkerOnRunWorkerCompleted;
+            CopyFilesBackgroundWorker.ProgressChanged += BackgroundCopyWorkerOnProgressChanged;
+            CopyFilesBackgroundWorker.RunWorkerCompleted += BackgroundCopyWorkerOnRunWorkerCompleted;
 
             var dto = new Business.DTOs.CopyWorkerDTO()
                           {
                               DestinationFolder = AppSettings.DestinationFolderLocation,
                               SourceFolder = AppSettings.SourceFolderLocation
                           };
-            BackgroundCopyWorker.RunWorkerAsync(dto);
+            CopyFilesBackgroundWorker.RunWorkerAsync(dto);
         }
 
         private void BackgroundCopyWorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
@@ -82,32 +82,6 @@ namespace CAAB
                 WorkingStatusLabel.Visible = false;
             }
             StatusProgressBar.Visible = false;
-            //StatusProgressBar.Value = 0;
-
-        }
-
-        private void BackgroundCopyWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
-        {
-            var numberOfFiles = 100;
-            var worker = (BackgroundWorker) sender;
-            var copyDto = doWorkEventArgs.Argument as Business.DTOs.CopyWorkerDTO;
-
-            for (int i = 0; i < numberOfFiles; i++)
-            {
-                System.Threading.Thread.Sleep(100);
-                if ( worker.CancellationPending)
-                {
-                    break;
-                }
-                worker.ReportProgress(i);
-            }
-            if( worker.CancellationPending)
-            {
-                doWorkEventArgs.Result = "Cancelled";
-            }else
-            {
-                doWorkEventArgs.Result = String.Format("Copied {0} files", numberOfFiles);
-            }
 
         }
 

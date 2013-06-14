@@ -41,10 +41,9 @@
             this.BeginCopy = new System.Windows.Forms.Button();
             this.SourceFolderLabel = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.DestinationFolderLabel = new System.Windows.Forms.Label();
-            this.BackgroundCopyWorker = new System.ComponentModel.BackgroundWorker();
-            this.FolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.SelectDestinationButton = new System.Windows.Forms.Button();
+            this.DestinationFolderLabel = new System.Windows.Forms.Label();
+            this.FolderDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -186,24 +185,6 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Destination";
             // 
-            // DestinationFolderLabel
-            // 
-            this.DestinationFolderLabel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.DestinationFolderLabel.Location = new System.Drawing.Point(3, 16);
-            this.DestinationFolderLabel.Name = "DestinationFolderLabel";
-            this.DestinationFolderLabel.Size = new System.Drawing.Size(320, 13);
-            this.DestinationFolderLabel.TabIndex = 1;
-            this.DestinationFolderLabel.Text = "e:\\backups\\{0}";
-            // 
-            // BackgroundCopyWorker
-            // 
-            this.BackgroundCopyWorker.WorkerReportsProgress = true;
-            this.BackgroundCopyWorker.WorkerSupportsCancellation = true;
-            // 
-            // FolderDialog
-            // 
-            this.FolderDialog.RootFolder = System.Environment.SpecialFolder.MyDocuments;
-            // 
             // SelectDestinationButton
             // 
             this.SelectDestinationButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -215,6 +196,19 @@
             this.SelectDestinationButton.Text = "Select Destination Folder";
             this.SelectDestinationButton.UseVisualStyleBackColor = true;
             this.SelectDestinationButton.Click += new System.EventHandler(this.SelectDestinationButtonClick);
+            // 
+            // DestinationFolderLabel
+            // 
+            this.DestinationFolderLabel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.DestinationFolderLabel.Location = new System.Drawing.Point(3, 16);
+            this.DestinationFolderLabel.Name = "DestinationFolderLabel";
+            this.DestinationFolderLabel.Size = new System.Drawing.Size(320, 13);
+            this.DestinationFolderLabel.TabIndex = 1;
+            this.DestinationFolderLabel.Text = "e:\\backups\\{0}";
+            // 
+            // FolderDialog
+            // 
+            this.FolderDialog.RootFolder = System.Environment.SpecialFolder.MyDocuments;
             // 
             // CAAB
             // 
@@ -256,7 +250,6 @@
         private System.Windows.Forms.Button BeginCopy;
         private System.Windows.Forms.ToolStripStatusLabel WorkingStatusLabel;
         private System.Windows.Forms.ToolStripProgressBar StatusProgressBar;
-        private System.ComponentModel.BackgroundWorker BackgroundCopyWorker;
         private System.Windows.Forms.Button SelectSourceButton;
         private System.Windows.Forms.Label DestinationFolderLabel;
         private System.Windows.Forms.FolderBrowserDialog FolderDialog;
