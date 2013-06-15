@@ -43,7 +43,10 @@
     <Compile Include="BackgroundWorkers\CopyFilesWorker.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="BackgroundWorkers\ResearchFolderForCopying.cs" />
     <Compile Include="DTOs\CopyWorkerDTO.cs" />
+    <Compile Include="DTOs\ResearchFolderDTO.cs" />
+    <Compile Include="DTOs\ResearchFolderResultsDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
