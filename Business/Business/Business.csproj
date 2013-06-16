@@ -43,7 +43,9 @@
     <Compile Include="BackgroundWorkers\CopyFilesWorker.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="BackgroundWorkers\ResearchFolderForCopying.cs" />
+    <Compile Include="BackgroundWorkers\ResearchFolderForCopying.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="DTOs\CopyWorkerDTO.cs" />
     <Compile Include="DTOs\ResearchFolderDTO.cs" />
     <Compile Include="DTOs\ResearchFolderResultsDTO.cs" />

@@ -38,20 +38,28 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.FolderDetailsPanel = new System.Windows.Forms.Panel();
+            this.TotalMBLabel = new System.Windows.Forms.Label();
+            this.FileCountLabel = new System.Windows.Forms.Label();
+            this.FolderCountLabel = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.SelectSourceButton = new System.Windows.Forms.Button();
             this.BeginCopy = new System.Windows.Forms.Button();
             this.SourceFolderLabel = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.DriveDetailsPanel = new System.Windows.Forms.Panel();
+            this.FreeSpaceLabel = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
             this.SelectDestinationButton = new System.Windows.Forms.Button();
             this.DestinationFolderLabel = new System.Windows.Forms.Label();
             this.FolderDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.FolderCountLabel = new System.Windows.Forms.Label();
-            this.FileCountLabel = new System.Windows.Forms.Label();
-            this.TotalMBLabel = new System.Windows.Forms.Label();
+            this.TotalUsedSpaceLabel = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.VolumeNameLabel = new System.Windows.Forms.Label();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -61,6 +69,7 @@
             this.groupBox1.SuspendLayout();
             this.FolderDetailsPanel.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.DriveDetailsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -167,6 +176,63 @@
             this.FolderDetailsPanel.TabIndex = 3;
             this.FolderDetailsPanel.Visible = false;
             // 
+            // TotalMBLabel
+            // 
+            this.TotalMBLabel.Location = new System.Drawing.Point(128, 66);
+            this.TotalMBLabel.Name = "TotalMBLabel";
+            this.TotalMBLabel.Size = new System.Drawing.Size(100, 23);
+            this.TotalMBLabel.TabIndex = 4;
+            this.TotalMBLabel.Text = "MB";
+            this.TotalMBLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // FileCountLabel
+            // 
+            this.FileCountLabel.Location = new System.Drawing.Point(128, 43);
+            this.FileCountLabel.Name = "FileCountLabel";
+            this.FileCountLabel.Size = new System.Drawing.Size(100, 23);
+            this.FileCountLabel.TabIndex = 4;
+            this.FileCountLabel.Text = "files";
+            this.FileCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // FolderCountLabel
+            // 
+            this.FolderCountLabel.Location = new System.Drawing.Point(129, 20);
+            this.FolderCountLabel.Name = "FolderCountLabel";
+            this.FolderCountLabel.Size = new System.Drawing.Size(100, 23);
+            this.FolderCountLabel.TabIndex = 4;
+            this.FolderCountLabel.Text = "folders";
+            this.FolderCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label4
+            // 
+            this.label4.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label4.Location = new System.Drawing.Point(7, 66);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(115, 23);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "Total Number of MB:";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label3
+            // 
+            this.label3.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label3.Location = new System.Drawing.Point(7, 43);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(115, 23);
+            this.label3.TabIndex = 2;
+            this.label3.Text = "Number of Files:";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label2
+            // 
+            this.label2.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label2.Location = new System.Drawing.Point(7, 20);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(115, 23);
+            this.label2.TabIndex = 1;
+            this.label2.Text = "Number of Folders:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // label1
             // 
             this.label1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -211,6 +277,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.DriveDetailsPanel);
             this.groupBox2.Controls.Add(this.SelectDestinationButton);
             this.groupBox2.Controls.Add(this.DestinationFolderLabel);
             this.groupBox2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -220,6 +287,61 @@
             this.groupBox2.TabIndex = 0;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Destination";
+            // 
+            // DriveDetailsPanel
+            // 
+            this.DriveDetailsPanel.Controls.Add(this.VolumeNameLabel);
+            this.DriveDetailsPanel.Controls.Add(this.TotalUsedSpaceLabel);
+            this.DriveDetailsPanel.Controls.Add(this.label6);
+            this.DriveDetailsPanel.Controls.Add(this.FreeSpaceLabel);
+            this.DriveDetailsPanel.Controls.Add(this.label5);
+            this.DriveDetailsPanel.Controls.Add(this.label10);
+            this.DriveDetailsPanel.Controls.Add(this.label11);
+            this.DriveDetailsPanel.Location = new System.Drawing.Point(17, 63);
+            this.DriveDetailsPanel.Name = "DriveDetailsPanel";
+            this.DriveDetailsPanel.Size = new System.Drawing.Size(297, 99);
+            this.DriveDetailsPanel.TabIndex = 4;
+            this.DriveDetailsPanel.Visible = false;
+            // 
+            // FreeSpaceLabel
+            // 
+            this.FreeSpaceLabel.Location = new System.Drawing.Point(129, 20);
+            this.FreeSpaceLabel.Name = "FreeSpaceLabel";
+            this.FreeSpaceLabel.Size = new System.Drawing.Size(100, 23);
+            this.FreeSpaceLabel.TabIndex = 4;
+            this.FreeSpaceLabel.Text = "freespace MB";
+            this.FreeSpaceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label5
+            // 
+            this.label5.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label5.Location = new System.Drawing.Point(7, 43);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(115, 23);
+            this.label5.TabIndex = 1;
+            this.label5.Text = "Total Used:";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label10
+            // 
+            this.label10.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label10.Location = new System.Drawing.Point(7, 20);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(115, 23);
+            this.label10.TabIndex = 1;
+            this.label10.Text = "Free Space:";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label11
+            // 
+            this.label11.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label11.Location = new System.Drawing.Point(0, 0);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(297, 16);
+            this.label11.TabIndex = 0;
+            this.label11.Text = "Drive Details";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // SelectDestinationButton
             // 
@@ -246,62 +368,33 @@
             // 
             this.FolderDialog.RootFolder = System.Environment.SpecialFolder.MyDocuments;
             // 
-            // label2
+            // TotalUsedSpaceLabel
             // 
-            this.label2.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label2.Location = new System.Drawing.Point(7, 20);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(115, 23);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Number of Folders:";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.TotalUsedSpaceLabel.Location = new System.Drawing.Point(129, 43);
+            this.TotalUsedSpaceLabel.Name = "TotalUsedSpaceLabel";
+            this.TotalUsedSpaceLabel.Size = new System.Drawing.Size(100, 23);
+            this.TotalUsedSpaceLabel.TabIndex = 4;
+            this.TotalUsedSpaceLabel.Text = "Used MB";
+            this.TotalUsedSpaceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // label3
+            // label6
             // 
-            this.label3.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label3.Location = new System.Drawing.Point(7, 43);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(115, 23);
-            this.label3.TabIndex = 2;
-            this.label3.Text = "Number of Files:";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label6.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label6.Location = new System.Drawing.Point(6, 66);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(115, 23);
+            this.label6.TabIndex = 1;
+            this.label6.Text = "Volume Name:";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label4
+            // VolumeNameLabel
             // 
-            this.label4.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label4.Location = new System.Drawing.Point(7, 66);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(115, 23);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "Total Number of MB:";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // FolderCountLabel
-            // 
-            this.FolderCountLabel.Location = new System.Drawing.Point(129, 20);
-            this.FolderCountLabel.Name = "FolderCountLabel";
-            this.FolderCountLabel.Size = new System.Drawing.Size(100, 23);
-            this.FolderCountLabel.TabIndex = 4;
-            this.FolderCountLabel.Text = "folders";
-            this.FolderCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // FileCountLabel
-            // 
-            this.FileCountLabel.Location = new System.Drawing.Point(128, 43);
-            this.FileCountLabel.Name = "FileCountLabel";
-            this.FileCountLabel.Size = new System.Drawing.Size(100, 23);
-            this.FileCountLabel.TabIndex = 4;
-            this.FileCountLabel.Text = "files";
-            this.FileCountLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // TotalMBLabel
-            // 
-            this.TotalMBLabel.Location = new System.Drawing.Point(128, 66);
-            this.TotalMBLabel.Name = "TotalMBLabel";
-            this.TotalMBLabel.Size = new System.Drawing.Size(100, 23);
-            this.TotalMBLabel.TabIndex = 4;
-            this.TotalMBLabel.Text = "MB";
-            this.TotalMBLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.VolumeNameLabel.Location = new System.Drawing.Point(128, 66);
+            this.VolumeNameLabel.Name = "VolumeNameLabel";
+            this.VolumeNameLabel.Size = new System.Drawing.Size(100, 23);
+            this.VolumeNameLabel.TabIndex = 4;
+            this.VolumeNameLabel.Text = "Name";
+            this.VolumeNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // CAAB
             // 
@@ -325,6 +418,7 @@
             this.groupBox1.ResumeLayout(false);
             this.FolderDetailsPanel.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
+            this.DriveDetailsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -356,6 +450,14 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Panel DriveDetailsPanel;
+        private System.Windows.Forms.Label FreeSpaceLabel;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label VolumeNameLabel;
+        private System.Windows.Forms.Label TotalUsedSpaceLabel;
+        private System.Windows.Forms.Label label6;
     }
 }
 

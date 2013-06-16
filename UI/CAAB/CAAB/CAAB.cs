@@ -56,17 +56,21 @@ namespace CAAB
 
         private void BeginCopyClick(object sender, EventArgs e)
         {
+            Cursor = Cursors.AppStarting;
+            BeginCopy.Enabled = false;
+
             AppSettings.LastCopy = DateTime.Now;
             UpdateLastCopyOnScreen();
             WorkingStatusLabel.Visible = true;
             StatusProgressBar.Visible = true;
-            StatusProgressBar.Value = 0;
+            StatusProgressBar.Value = 0;           
 
             CopyFilesBackgroundWorker.ProgressChanged += BackgroundWorkerOnProgressChanged;
             CopyFilesBackgroundWorker.RunWorkerCompleted += BackgroundCopyWorkerOnRunWorkerCompleted;
 
             var dto = new Business.DTOs.CopyWorkerDTO()
                           {
+                              CreateDate = DateTime.Now,
                               DestinationFolder = AppSettings.DestinationFolderLocation,
                               SourceFolder = AppSettings.SourceFolderLocation
                           };
@@ -84,16 +88,22 @@ namespace CAAB
                 WorkingStatusLabel.Visible = false;
             }
             StatusProgressBar.Visible = false;
-
+            BeginCopy.Enabled = true;
+            Cursor = Cursors.Arrow;
         }
 
         private void BackgroundWorkerOnProgressChanged(object sender, ProgressChangedEventArgs progressChangedEventArgs)
         {
-            StatusProgressBar.Value = progressChangedEventArgs.ProgressPercentage;
+                StatusProgressBar.Value = progressChangedEventArgs.ProgressPercentage;
         }
 
         private void SelectSourceButtonClick(object sender, EventArgs e)
         {
+            Cursor = Cursors.AppStarting;
+            SelectSourceButton.Enabled = false;
+            BeginCopy.Enabled = false;
+
+            FolderDialog.RootFolder = Environment.SpecialFolder.MyDocuments;
             if (FolderDialog.ShowDialog() == DialogResult.OK)
             {
                 SourceFolderLabel.Text = FolderDialog.SelectedPath;
@@ -125,19 +135,37 @@ namespace CAAB
             StatusProgressBar.Visible = false;
 
 
-
+            SelectSourceButton.Enabled = true;
+            BeginCopy.Enabled = true;
+            Cursor = Cursors.Arrow;
         }
 
         private void SelectDestinationButtonClick(object sender, EventArgs e)
         {
+            Cursor = Cursors.AppStarting;
+            BeginCopy.Enabled = false;
+
             FolderDialog.RootFolder = Environment.SpecialFolder.MyComputer;
             if (FolderDialog.ShowDialog() == DialogResult.OK)
             {
                 DestinationFolderLabel.Text = FolderDialog.SelectedPath;
                 AppSettings.DestinationFolderLocation = FolderDialog.SelectedPath;
+                var drive = new System.IO.DriveInfo(FolderDialog.SelectedPath.Substring(0, 1));
+
+                FreeSpaceLabel.Text = String.Format("{0:#,###,##0.00} MB", drive.TotalFreeSpace/1024.0/1024.0);
+                TotalUsedSpaceLabel.Text = String.Format("{0:#,###,##0.00} MB", drive.TotalSize/ 1024.0 / 1024.0);
+                VolumeNameLabel.Text = String.Format("{0} - {1}", drive.VolumeLabel, drive.Name);
+
+                DriveDetailsPanel.Visible = true;
+
+
             }
 
+            BeginCopy.Enabled = true;
+
+            Cursor = Cursors.Arrow;
         }
+
 
     }
 }
