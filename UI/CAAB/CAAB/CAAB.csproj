@@ -79,9 +79,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Business\Business\Business.csproj">
+    <ProjectReference Include="..\..\..\Business\Business\CAAB.Workers.csproj">
       <Project>{1E8F6EB0-E2E0-4DD3-99C5-88CF5C0A941B}</Project>
-      <Name>Business</Name>
+      <Name>CAAB.Workers</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CAAB", "CAAB\CAAB.csproj", "{EA15C32A-16C9-44AF-AAB6-6ED24FDB2ABA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Business", "..\..\Business\Business\Business.csproj", "{1E8F6EB0-E2E0-4DD3-99C5-88CF5C0A941B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CAAB.Workers", "..\..\Business\Business\CAAB.Workers.csproj", "{1E8F6EB0-E2E0-4DD3-99C5-88CF5C0A941B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

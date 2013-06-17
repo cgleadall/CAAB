@@ -32,6 +32,8 @@
             this.LastCopyStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.WorkingStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.StatusProgressBar = new System.Windows.Forms.ToolStripProgressBar();
+            this.TotalCopyTimeLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.CopyThroughputLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -50,6 +52,9 @@
             this.SourceFolderLabel = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.DriveDetailsPanel = new System.Windows.Forms.Panel();
+            this.VolumeNameLabel = new System.Windows.Forms.Label();
+            this.TotalUsedSpaceLabel = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
             this.FreeSpaceLabel = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
@@ -57,9 +62,7 @@
             this.SelectDestinationButton = new System.Windows.Forms.Button();
             this.DestinationFolderLabel = new System.Windows.Forms.Label();
             this.FolderDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.TotalUsedSpaceLabel = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.VolumeNameLabel = new System.Windows.Forms.Label();
+            this.StopCopyButton = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -77,7 +80,9 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.LastCopyStatusLabel,
             this.WorkingStatusLabel,
-            this.StatusProgressBar});
+            this.StatusProgressBar,
+            this.TotalCopyTimeLabel,
+            this.CopyThroughputLabel});
             this.statusStrip1.Location = new System.Drawing.Point(0, 336);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(639, 22);
@@ -104,6 +109,20 @@
             this.StatusProgressBar.Step = 1;
             this.StatusProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Continuous;
             this.StatusProgressBar.Visible = false;
+            // 
+            // TotalCopyTimeLabel
+            // 
+            this.TotalCopyTimeLabel.Name = "TotalCopyTimeLabel";
+            this.TotalCopyTimeLabel.Size = new System.Drawing.Size(68, 17);
+            this.TotalCopyTimeLabel.Text = "Copy Time:";
+            this.TotalCopyTimeLabel.Visible = false;
+            // 
+            // CopyThroughputLabel
+            // 
+            this.CopyThroughputLabel.Name = "CopyThroughputLabel";
+            this.CopyThroughputLabel.Size = new System.Drawing.Size(35, 17);
+            this.CopyThroughputLabel.Text = "MB/s";
+            this.CopyThroughputLabel.Visible = false;
             // 
             // menuStrip1
             // 
@@ -258,7 +277,7 @@
             // 
             // BeginCopy
             // 
-            this.BeginCopy.Location = new System.Drawing.Point(103, 283);
+            this.BeginCopy.Location = new System.Drawing.Point(228, 283);
             this.BeginCopy.Name = "BeginCopy";
             this.BeginCopy.Size = new System.Drawing.Size(75, 23);
             this.BeginCopy.TabIndex = 1;
@@ -277,6 +296,7 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.StopCopyButton);
             this.groupBox2.Controls.Add(this.DriveDetailsPanel);
             this.groupBox2.Controls.Add(this.SelectDestinationButton);
             this.groupBox2.Controls.Add(this.DestinationFolderLabel);
@@ -302,6 +322,34 @@
             this.DriveDetailsPanel.Size = new System.Drawing.Size(297, 99);
             this.DriveDetailsPanel.TabIndex = 4;
             this.DriveDetailsPanel.Visible = false;
+            // 
+            // VolumeNameLabel
+            // 
+            this.VolumeNameLabel.Location = new System.Drawing.Point(128, 66);
+            this.VolumeNameLabel.Name = "VolumeNameLabel";
+            this.VolumeNameLabel.Size = new System.Drawing.Size(100, 23);
+            this.VolumeNameLabel.TabIndex = 4;
+            this.VolumeNameLabel.Text = "Name";
+            this.VolumeNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // TotalUsedSpaceLabel
+            // 
+            this.TotalUsedSpaceLabel.Location = new System.Drawing.Point(129, 43);
+            this.TotalUsedSpaceLabel.Name = "TotalUsedSpaceLabel";
+            this.TotalUsedSpaceLabel.Size = new System.Drawing.Size(100, 23);
+            this.TotalUsedSpaceLabel.TabIndex = 4;
+            this.TotalUsedSpaceLabel.Text = "Used MB";
+            this.TotalUsedSpaceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label6
+            // 
+            this.label6.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label6.Location = new System.Drawing.Point(6, 66);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(115, 23);
+            this.label6.TabIndex = 1;
+            this.label6.Text = "Volume Name:";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // FreeSpaceLabel
             // 
@@ -368,33 +416,16 @@
             // 
             this.FolderDialog.RootFolder = System.Environment.SpecialFolder.MyDocuments;
             // 
-            // TotalUsedSpaceLabel
+            // StopCopyButton
             // 
-            this.TotalUsedSpaceLabel.Location = new System.Drawing.Point(129, 43);
-            this.TotalUsedSpaceLabel.Name = "TotalUsedSpaceLabel";
-            this.TotalUsedSpaceLabel.Size = new System.Drawing.Size(100, 23);
-            this.TotalUsedSpaceLabel.TabIndex = 4;
-            this.TotalUsedSpaceLabel.Text = "Used MB";
-            this.TotalUsedSpaceLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label6
-            // 
-            this.label6.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.label6.Location = new System.Drawing.Point(6, 66);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(115, 23);
-            this.label6.TabIndex = 1;
-            this.label6.Text = "Volume Name:";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // VolumeNameLabel
-            // 
-            this.VolumeNameLabel.Location = new System.Drawing.Point(128, 66);
-            this.VolumeNameLabel.Name = "VolumeNameLabel";
-            this.VolumeNameLabel.Size = new System.Drawing.Size(100, 23);
-            this.VolumeNameLabel.TabIndex = 4;
-            this.VolumeNameLabel.Text = "Name";
-            this.VolumeNameLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.StopCopyButton.Enabled = false;
+            this.StopCopyButton.Location = new System.Drawing.Point(3, 283);
+            this.StopCopyButton.Name = "StopCopyButton";
+            this.StopCopyButton.Size = new System.Drawing.Size(75, 23);
+            this.StopCopyButton.TabIndex = 4;
+            this.StopCopyButton.Text = "Stop";
+            this.StopCopyButton.UseVisualStyleBackColor = true;
+            this.StopCopyButton.Click += new System.EventHandler(this.StopCopyButtonClick);
             // 
             // CAAB
             // 
@@ -458,6 +489,9 @@
         private System.Windows.Forms.Label VolumeNameLabel;
         private System.Windows.Forms.Label TotalUsedSpaceLabel;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.ToolStripStatusLabel TotalCopyTimeLabel;
+        private System.Windows.Forms.ToolStripStatusLabel CopyThroughputLabel;
+        private System.Windows.Forms.Button StopCopyButton;
     }
 }
 

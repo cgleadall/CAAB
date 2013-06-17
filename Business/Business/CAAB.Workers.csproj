@@ -8,8 +8,8 @@
     <ProjectGuid>{1E8F6EB0-E2E0-4DD3-99C5-88CF5C0A941B}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Business</RootNamespace>
-    <AssemblyName>Business</AssemblyName>
+    <RootNamespace>CAAB.Workers</RootNamespace>
+    <AssemblyName>CAAB.Workers</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -47,6 +47,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DTOs\CopyWorkerDTO.cs" />
+    <Compile Include="DTOs\CopyWorkerResultsDTO.cs" />
     <Compile Include="DTOs\ResearchFolderDTO.cs" />
     <Compile Include="DTOs\ResearchFolderResultsDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

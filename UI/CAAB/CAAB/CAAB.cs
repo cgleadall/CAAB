@@ -3,25 +3,29 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Business.BackgroundWorkers;
 using CAAB.Properties;
+using CAAB.Workers.BackgroundWorkers;
+using CAAB.Workers.DTOs;
 
 namespace CAAB
 {
     public partial class CAAB : Form
     {
         public ApplicationSettings AppSettings { get; set; }
-        public Business.BackgroundWorkers.CopyFilesWorker CopyFilesBackgroundWorker { get; set; }
-        public Business.BackgroundWorkers.ResearchFolderForCopying ResearchFolderBackgroundWorker { get; set; }
+        public CopyFilesWorker CopyFilesBackgroundWorker { get; set; }
+        public ResearchFolderForCopying ResearchFolderBackgroundWorker { get; set; }
 
+        private bool ShownHasBeenRun { get; set; }
         public CAAB()
         {
             InitializeComponent();
             AppSettings = ApplicationSettings.Instance;
-            CopyFilesBackgroundWorker = new Business.BackgroundWorkers.CopyFilesWorker();
+            CopyFilesBackgroundWorker = new CopyFilesWorker();
+            ShownHasBeenRun = false;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -30,6 +34,26 @@ namespace CAAB
 
 
             UpdateLastCopyOnScreen();
+
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
+
+            if (!ShownHasBeenRun)
+            {
+                if (!String.IsNullOrEmpty(AppSettings.SourceFolderLocation))
+                {
+                    StartResearchingSourceFolder(AppSettings.SourceFolderLocation);
+                }
+
+                if (!String.IsNullOrEmpty(AppSettings.DestinationFolderLocation))
+                {
+                    ResearchDestinationFolder(AppSettings.DestinationFolderLocation);
+                }
+            }
+            ShownHasBeenRun = true;
         }
 
         private void UpdateLastCopyOnScreen()
@@ -58,17 +82,20 @@ namespace CAAB
         {
             Cursor = Cursors.AppStarting;
             BeginCopy.Enabled = false;
+            StopCopyButton.Enabled = true;
 
             AppSettings.LastCopy = DateTime.Now;
             UpdateLastCopyOnScreen();
+            WorkingStatusLabel.Text = "copying...";
             WorkingStatusLabel.Visible = true;
+
+            StatusProgressBar.Value = 0;
             StatusProgressBar.Visible = true;
-            StatusProgressBar.Value = 0;           
 
             CopyFilesBackgroundWorker.ProgressChanged += BackgroundWorkerOnProgressChanged;
             CopyFilesBackgroundWorker.RunWorkerCompleted += BackgroundCopyWorkerOnRunWorkerCompleted;
 
-            var dto = new Business.DTOs.CopyWorkerDTO()
+            var dto = new CopyWorkerDTO()
                           {
                               CreateDate = DateTime.Now,
                               DestinationFolder = AppSettings.DestinationFolderLocation,
@@ -79,9 +106,11 @@ namespace CAAB
 
         private void BackgroundCopyWorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
         {
+            var resultDTO = (CopyWorkerResultsDTO)runWorkerCompletedEventArgs.Result;
             if (!runWorkerCompletedEventArgs.Cancelled)
             {
-                WorkingStatusLabel.Text = runWorkerCompletedEventArgs.Result as String;
+                WorkingStatusLabel.Text = resultDTO.Message;
+                UpateStatusBarMetrics(resultDTO);
             }
             else
             {
@@ -89,12 +118,13 @@ namespace CAAB
             }
             StatusProgressBar.Visible = false;
             BeginCopy.Enabled = true;
+            StopCopyButton.Enabled = false;
             Cursor = Cursors.Arrow;
         }
 
         private void BackgroundWorkerOnProgressChanged(object sender, ProgressChangedEventArgs progressChangedEventArgs)
         {
-                StatusProgressBar.Value = progressChangedEventArgs.ProgressPercentage;
+            StatusProgressBar.Value = progressChangedEventArgs.ProgressPercentage;
         }
 
         private void SelectSourceButtonClick(object sender, EventArgs e)
@@ -104,31 +134,45 @@ namespace CAAB
             BeginCopy.Enabled = false;
 
             FolderDialog.RootFolder = Environment.SpecialFolder.MyDocuments;
-            if (FolderDialog.ShowDialog() == DialogResult.OK)
+
+            var dialogResult = FolderDialog.ShowDialog();
+
+            switch (dialogResult)
             {
-                SourceFolderLabel.Text = FolderDialog.SelectedPath;
-                AppSettings.SourceFolderLocation = FolderDialog.SelectedPath;
-                ResearchFolderBackgroundWorker = new ResearchFolderForCopying();
-                ResearchFolderBackgroundWorker.ProgressChanged += BackgroundWorkerOnProgressChanged;
-                ResearchFolderBackgroundWorker.RunWorkerCompleted += ResearchFolderBackgroundWorkerOnRunWorkerCompleted;
+                case DialogResult.OK:
+                    SourceFolderLabel.Text = FolderDialog.SelectedPath;
+                    AppSettings.SourceFolderLocation = FolderDialog.SelectedPath;
 
-                StatusProgressBar.Value = 0;
-                StatusProgressBar.Visible = true;
-
-                ResearchFolderBackgroundWorker.RunWorkerAsync(new Business.DTOs.ResearchFolderDTO { SourceFolder = FolderDialog.SelectedPath });
+                    StartResearchingSourceFolder(FolderDialog.SelectedPath);
+                    break;
+                default:
+                    Cursor = Cursors.Arrow;
+                    break;
             }
+        }
+
+        private void StartResearchingSourceFolder(string selectedPath)
+        {
+            ResearchFolderBackgroundWorker = new ResearchFolderForCopying();
+            ResearchFolderBackgroundWorker.ProgressChanged += BackgroundWorkerOnProgressChanged;
+            ResearchFolderBackgroundWorker.RunWorkerCompleted += ResearchFolderBackgroundWorkerOnRunWorkerCompleted;
+
+            StatusProgressBar.Value = 0;
+            StatusProgressBar.Visible = true;
+
+            ResearchFolderBackgroundWorker.RunWorkerAsync(new ResearchFolderDTO { SourceFolder = selectedPath });
         }
 
         private void ResearchFolderBackgroundWorkerOnRunWorkerCompleted(object sender, RunWorkerCompletedEventArgs runWorkerCompletedEventArgs)
         {
             if (!runWorkerCompletedEventArgs.Cancelled)
             {
-                var resultDTO = runWorkerCompletedEventArgs.Result as Business.DTOs.ResearchFolderResultsDTO;
+                var resultDTO = runWorkerCompletedEventArgs.Result as ResearchFolderResultsDTO;
 
                 FolderCountLabel.Text = String.Format("{0}", resultDTO.NumberOfDirectories);
                 FileCountLabel.Text = String.Format("{0}", resultDTO.NumberOfFiles);
                 TotalMBLabel.Text = String.Format("{0:#,###,##0.00} MB",
-                                                  ((double) (resultDTO.TotalNumberOfBytes/1024.0/1024.0)));
+                                                  ((double)(resultDTO.TotalNumberOfBytes / 1024.0 / 1024.0)));
                 FolderDetailsPanel.Visible = true;
             }
             WorkingStatusLabel.Visible = false;
@@ -146,26 +190,76 @@ namespace CAAB
             BeginCopy.Enabled = false;
 
             FolderDialog.RootFolder = Environment.SpecialFolder.MyComputer;
-            if (FolderDialog.ShowDialog() == DialogResult.OK)
+
+            var dialogresult = FolderDialog.ShowDialog();
+
+            if (dialogresult == DialogResult.OK)
             {
-                DestinationFolderLabel.Text = FolderDialog.SelectedPath;
-                AppSettings.DestinationFolderLocation = FolderDialog.SelectedPath;
-                var drive = new System.IO.DriveInfo(FolderDialog.SelectedPath.Substring(0, 1));
+                var selectedPath = FolderDialog.SelectedPath;
 
-                FreeSpaceLabel.Text = String.Format("{0:#,###,##0.00} MB", drive.TotalFreeSpace/1024.0/1024.0);
-                TotalUsedSpaceLabel.Text = String.Format("{0:#,###,##0.00} MB", drive.TotalSize/ 1024.0 / 1024.0);
-                VolumeNameLabel.Text = String.Format("{0} - {1}", drive.VolumeLabel, drive.Name);
-
-                DriveDetailsPanel.Visible = true;
-
-
+                ResearchDestinationFolder(selectedPath);
             }
 
             BeginCopy.Enabled = true;
-
             Cursor = Cursors.Arrow;
+
         }
 
+        private void ResearchDestinationFolder(string selectedPath)
+        {
+            var drive = new System.IO.DriveInfo(selectedPath.Substring(0, 1));
 
+            bool forceCopy = false;
+
+            if (drive.DriveType != DriveType.Removable)
+            {
+                var message =
+                    String.Format(
+                        "The selected path is on drive ({0}) which is not removable.\r\nAre you sure that you want to copy to this location?",
+                        drive.Name);
+                var dialogResult = MessageBox.Show(message, "Are you sure?", MessageBoxButtons.YesNo,
+                                            MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
+
+                forceCopy = dialogResult == DialogResult.Yes;
+                if( dialogResult == DialogResult.No)
+                {
+                    AppSettings.DestinationFolderLocation = String.Empty;
+                    DestinationFolderLabel.Text = AppSettings.DestinationFolderLocation;
+                }
+            }
+
+            if (forceCopy || drive.DriveType == DriveType.Removable)
+            {
+                DestinationFolderLabel.Text = selectedPath;
+                AppSettings.DestinationFolderLocation = selectedPath;
+
+
+                FreeSpaceLabel.Text = String.Format("{0:#,###,##0.00} MB",
+                                                    drive.AvailableFreeSpace / 1024.0 / 1024.0);
+                TotalUsedSpaceLabel.Text = String.Format("{0:#,###,##0.00} MB", drive.TotalSize / 1024.0 / 1024.0);
+                VolumeNameLabel.Text = String.Format("{0} - {1}", drive.VolumeLabel, drive.Name);
+
+                DriveDetailsPanel.Visible = true;
+            }
+        }
+
+        private void UpateStatusBarMetrics(CopyWorkerResultsDTO resultsDTO)
+        {
+
+            CopyThroughputLabel.Text = String.Format("at {0:#,##0.00} MB/s",
+                                                     resultsDTO.TotalBytes / 1024.0 / 1024.0 / (resultsDTO.TotalMilliseconds / 1000.0));
+            var dt = new DateTime(2013, 10, 1, 0, 0, 0);
+            dt = dt.AddMilliseconds(resultsDTO.TotalMilliseconds);
+
+            TotalCopyTimeLabel.Text = String.Format("in {0:HH:mm:ss}", dt);
+
+            CopyThroughputLabel.Visible = true;
+            TotalCopyTimeLabel.Visible = true;
+        }
+
+        private void StopCopyButtonClick(object sender, EventArgs e)
+        {
+            CopyFilesBackgroundWorker.CancelAsync();
+        }
     }
 }

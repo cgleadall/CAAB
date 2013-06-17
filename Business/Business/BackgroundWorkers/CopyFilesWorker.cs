@@ -1,57 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.ComponentModel;
+using CAAB.Workers.DTOs;
 
-namespace Business.BackgroundWorkers
+namespace CAAB.Workers.BackgroundWorkers
 {
     public class CopyFilesWorker : BackgroundWorker
     {
         public CopyFilesWorker()
         {
-            this.WorkerReportsProgress = true;
-            this.WorkerSupportsCancellation = true;
-            this.DoWork += CopyFilesWorkerOnDoWork;
-
+            WorkerReportsProgress = true;
+            WorkerSupportsCancellation = true;
+            DoWork += CopyFilesWorkerOnDoWork;
         }
 
         private void CopyFilesWorkerOnDoWork(object sender, DoWorkEventArgs doWorkEventArgs)
         {
-            var worker = (BackgroundWorker)sender;
-            var copyDto = doWorkEventArgs.Argument as Business.DTOs.CopyWorkerDTO;
+            var worker = (BackgroundWorker) sender;
+            var copyDto = doWorkEventArgs.Argument as CopyWorkerDTO;
+            var resultDTO = new CopyWorkerResultsDTO();
 
-            var targetFolder = System.IO.Path.Combine(copyDto.DestinationFolder,
-                                                      String.Format("{0:yyyy-MM-dd-HH-mm-ss}", copyDto.CreateDate));
+            string targetFolder = Path.Combine(copyDto.DestinationFolder,
+                                               String.Format("{0:yyyy-MM-dd-HH-mm-ss}", copyDto.CreateDate));
 
-            if(!System.IO.Directory.Exists(targetFolder))
+            if (!Directory.Exists(targetFolder))
             {
                 Directory.CreateDirectory(targetFolder);
             }
 
-            var totalFiles = Directory.EnumerateFiles(copyDto.SourceFolder, "*", SearchOption.AllDirectories).Count();
+            resultDTO.TotalFiles =
+                Directory.EnumerateFiles(copyDto.SourceFolder, "*", SearchOption.AllDirectories).Count();
+            resultDTO.TotalBytes = 0;
 
-            var dirs = System.IO.Directory.EnumerateDirectories(copyDto.SourceFolder, "*", SearchOption.AllDirectories).ToList();
+            List<string> dirs =
+                Directory.EnumerateDirectories(copyDto.SourceFolder, "*", SearchOption.AllDirectories).ToList();
             dirs.Add(copyDto.SourceFolder);
 
-            var kounter = 1;
-            foreach (var dir in dirs)
+            int kounter = 1;
+            Stopwatch sw = Stopwatch.StartNew();
+            foreach (string dir in dirs)
             {
-                var files = System.IO.Directory.EnumerateFiles(dir, "*", SearchOption.TopDirectoryOnly).ToList();
+                List<string> files = Directory.EnumerateFiles(dir, "*", SearchOption.TopDirectoryOnly).ToList();
 
-                foreach (var file in files)
+                foreach (string file in files)
                 {
-                    worker.ReportProgress( (kounter*100/totalFiles));
-                    var fi = new System.IO.FileInfo(file);
-                    var extraPath = dir.Substring(copyDto.SourceFolder.LastIndexOf("\\"));
+                    worker.ReportProgress((kounter*100/resultDTO.TotalFiles));
+                    var fi = new FileInfo(file);
+
+                    resultDTO.TotalBytes += fi.Length;
+
+                    string extraPath = dir.Substring(copyDto.SourceFolder.LastIndexOf("\\"));
                     string targetFileName;
                     string destinationFolder = string.Empty;
 
-                    if( !String.IsNullOrEmpty(extraPath) && !targetFolder.Contains(extraPath))
+                    if (!String.IsNullOrEmpty(extraPath) && !targetFolder.Contains(extraPath))
                     {
-                        destinationFolder = System.IO.Path.Combine(targetFolder, extraPath.TrimStart("\\".ToCharArray()));
-                    }else
+                        destinationFolder = Path.Combine(targetFolder, extraPath.TrimStart("\\".ToCharArray()));
+                    }
+                    else
                     {
                         destinationFolder = targetFolder;
                     }
@@ -62,29 +71,31 @@ namespace Business.BackgroundWorkers
                     {
                         break;
                     }
-                    if(! Directory.Exists(destinationFolder))
+                    if (! Directory.Exists(destinationFolder))
                     {
                         Directory.CreateDirectory(destinationFolder);
                     }
-                    System.IO.File.Copy(file, targetFileName);
+                    File.Copy(file, targetFileName);
                     kounter++;
                 }
-                if( worker.CancellationPending)
+                if (worker.CancellationPending)
                 {
                     break;
                 }
             }
+            sw.Stop();
+            resultDTO.TotalMilliseconds = sw.ElapsedMilliseconds;
 
             if (worker.CancellationPending)
             {
-                doWorkEventArgs.Result = "Cancelled";
+                resultDTO.Message = "Cancelled";
             }
             else
             {
-                doWorkEventArgs.Result = String.Format("Copied {0} files", totalFiles);
+                resultDTO.Message = String.Format("Copied {0} files", resultDTO.TotalFiles);
             }
 
+            doWorkEventArgs.Result = resultDTO;
         }
-
     }
 }

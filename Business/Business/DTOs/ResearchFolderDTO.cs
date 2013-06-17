@@ -1,4 +1,4 @@
-namespace Business.DTOs
+namespace CAAB.Workers.DTOs
 {
     public class ResearchFolderDTO
     {
