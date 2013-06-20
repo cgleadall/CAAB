@@ -51,6 +51,7 @@
             this.BeginCopy = new System.Windows.Forms.Button();
             this.SourceFolderLabel = new System.Windows.Forms.Label();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.StopCopyButton = new System.Windows.Forms.Button();
             this.DriveDetailsPanel = new System.Windows.Forms.Panel();
             this.VolumeNameLabel = new System.Windows.Forms.Label();
             this.TotalUsedSpaceLabel = new System.Windows.Forms.Label();
@@ -62,7 +63,6 @@
             this.SelectDestinationButton = new System.Windows.Forms.Button();
             this.DestinationFolderLabel = new System.Windows.Forms.Label();
             this.FolderDialog = new System.Windows.Forms.FolderBrowserDialog();
-            this.StopCopyButton = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -308,6 +308,17 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Destination";
             // 
+            // StopCopyButton
+            // 
+            this.StopCopyButton.Enabled = false;
+            this.StopCopyButton.Location = new System.Drawing.Point(3, 283);
+            this.StopCopyButton.Name = "StopCopyButton";
+            this.StopCopyButton.Size = new System.Drawing.Size(75, 23);
+            this.StopCopyButton.TabIndex = 4;
+            this.StopCopyButton.Text = "Stop";
+            this.StopCopyButton.UseVisualStyleBackColor = true;
+            this.StopCopyButton.Click += new System.EventHandler(this.StopCopyButtonClick);
+            // 
             // DriveDetailsPanel
             // 
             this.DriveDetailsPanel.Controls.Add(this.VolumeNameLabel);
@@ -415,17 +426,6 @@
             // FolderDialog
             // 
             this.FolderDialog.RootFolder = System.Environment.SpecialFolder.MyDocuments;
-            // 
-            // StopCopyButton
-            // 
-            this.StopCopyButton.Enabled = false;
-            this.StopCopyButton.Location = new System.Drawing.Point(3, 283);
-            this.StopCopyButton.Name = "StopCopyButton";
-            this.StopCopyButton.Size = new System.Drawing.Size(75, 23);
-            this.StopCopyButton.TabIndex = 4;
-            this.StopCopyButton.Text = "Stop";
-            this.StopCopyButton.UseVisualStyleBackColor = true;
-            this.StopCopyButton.Click += new System.EventHandler(this.StopCopyButtonClick);
             // 
             // CAAB
             // 
