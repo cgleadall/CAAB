@@ -134,7 +134,7 @@ namespace CAAB
             BeginCopy.Enabled = false;
 
             FolderDialog.RootFolder = Environment.SpecialFolder.MyDocuments;
-
+            
             var dialogResult = FolderDialog.ShowDialog();
 
             switch (dialogResult)

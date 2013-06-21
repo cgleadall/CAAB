@@ -3989,10 +3989,13 @@
 		<col def="I2">ISIconIndex</col>
 		<row><td>ARPPRODUCTICON.exe</td><td/><td>&lt;ISProductFolder&gt;\redist\Language Independent\OS Independent\setupicon.ico</td><td>0</td></row>
 		<row><td>_0F1749A8F76D4372A8C2DF994EE42302.exe</td><td/><td>C:\Users\cgleadall\Documents\GitHub\CAAB\UI\CAAB\CAAB\obj\x86\Release\CAAB.exe</td><td>0</td></row>
+		<row><td>_279262C9B1B648239F1A6FBDA60C9D85.exe</td><td/><td>C:\Users\cgleadall\Documents\GitHub\CAAB\UI\CAAB\CAAB\obj\x86\Debug\CAAB.exe</td><td>0</td></row>
 		<row><td>_2AC0B16837D24151961F9182D50DB6FD.exe</td><td/><td>C:\Users\cgleadall\Documents\GitHub\CAAB\UI\CAAB\CAAB\obj\x86\Release\CAAB.exe</td><td>0</td></row>
+		<row><td>_2DB49BFC4B9D40C1A7EA0C4B529EC5D0.exe</td><td/><td>C:\Users\cgleadall\Documents\GitHub\CAAB\UI\CAAB\CAAB\obj\x86\Debug\CAAB.exe</td><td>0</td></row>
 		<row><td>_BD7A67570B34404CA009B3AFEC2632A0.exe</td><td/><td>C:\Users\cgleadall\Documents\GitHub\CAAB\UI\CAAB\CAAB\obj\x86\Release\CAAB.exe</td><td>0</td></row>
 		<row><td>_C59A37AD8E2C4B4EAE7D8A2624D0A1F9.exe</td><td/><td>C:\Users\cgleadall\Documents\GitHub\CAAB\UI\CAAB\CAAB\obj\x86\Release\CAAB.exe</td><td>0</td></row>
 		<row><td>_C93DE107C4ED4D689AD44ED85AC61B33.exe</td><td/><td>C:\Users\cgleadall\Documents\GitHub\CAAB\UI\CAAB\CAAB\obj\x86\Release\CAAB.exe</td><td>0</td></row>
+		<row><td>_E30888A5FEC645E48BB37FF43C3ECECD.exe</td><td/><td>C:\Users\cgleadall\Documents\GitHub\CAAB\UI\CAAB\CAAB\obj\x86\Debug\CAAB.exe</td><td>0</td></row>
 	</table>
 
 	<table name="IniFile">
