@@ -31,28 +31,19 @@ namespace CAAB.Workers.BackgroundWorkers
                 Directory.CreateDirectory(targetFolder);
             }
 
-            resultDTO.TotalFiles =
-                Directory.EnumerateFiles(copyDto.SourceFolder, "*", SearchOption.AllDirectories).Count();
+            resultDTO.TotalFiles = copyDto.FilesToCopy.Count;
             resultDTO.TotalBytes = 0;
-
-            List<string> dirs =
-                Directory.EnumerateDirectories(copyDto.SourceFolder, "*", SearchOption.AllDirectories).ToList();
-            dirs.Add(copyDto.SourceFolder);
 
             int kounter = 1;
             Stopwatch sw = Stopwatch.StartNew();
-            foreach (string dir in dirs)
-            {
-                List<string> files = Directory.EnumerateFiles(dir, "*", SearchOption.TopDirectoryOnly).ToList();
-
-                foreach (string file in files)
+                foreach (string file in copyDto.FilesToCopy)
                 {
                     worker.ReportProgress((kounter*100/resultDTO.TotalFiles));
                     var fi = new FileInfo(file);
 
                     resultDTO.TotalBytes += fi.Length;
 
-                    string extraPath = dir.Substring(copyDto.SourceFolder.LastIndexOf("\\"));
+                    string extraPath = fi.DirectoryName.Substring(copyDto.SourceFolder.LastIndexOf("\\"));
                     string targetFileName;
                     string destinationFolder = string.Empty;
 
@@ -77,8 +68,8 @@ namespace CAAB.Workers.BackgroundWorkers
                     }
                     File.Copy(file, targetFileName);
                     kounter++;
-                }
-                if (worker.CancellationPending)
+
+                    if (worker.CancellationPending)
                 {
                     break;
                 }

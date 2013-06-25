@@ -277,6 +277,7 @@
             // 
             // BeginCopy
             // 
+            this.BeginCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.BeginCopy.Location = new System.Drawing.Point(228, 283);
             this.BeginCopy.Name = "BeginCopy";
             this.BeginCopy.Size = new System.Drawing.Size(75, 23);
@@ -310,6 +311,7 @@
             // 
             // StopCopyButton
             // 
+            this.StopCopyButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.StopCopyButton.Enabled = false;
             this.StopCopyButton.Location = new System.Drawing.Point(3, 283);
             this.StopCopyButton.Name = "StopCopyButton";

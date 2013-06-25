@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
@@ -17,7 +18,7 @@ namespace CAAB.Workers.BackgroundWorkers
 
         private void ResearchFolder(object sender, DoWorkEventArgs doWorkEventArgs)
         {
-            var worker = (BackgroundWorker) sender;
+            var worker = (BackgroundWorker)sender;
             var result = new ResearchFolderResultsDTO();
 
             var dto = doWorkEventArgs.Argument as ResearchFolderDTO;
@@ -27,21 +28,38 @@ namespace CAAB.Workers.BackgroundWorkers
                 return;
             }
 
+
+            result.NumberOfDirectories = 0;
+            result.NumberOfFiles = 0;
+
             IEnumerable<string> dirs = Directory.EnumerateDirectories(dto.SourceFolder, "*", SearchOption.AllDirectories);
-            List<string> files = Directory.EnumerateFiles(dto.SourceFolder, "*", SearchOption.AllDirectories).ToList();
 
-            result.NumberOfDirectories = dirs.Count();
-            result.NumberOfFiles = files.Count();
-
-            for (int i = 0; i < result.NumberOfFiles; i++)
+            try
             {
-                var progress = (int) ((i*100.0)/result.NumberOfFiles);
-                worker.ReportProgress(progress);
+                foreach (var dir in dirs)
+                {
+                    result.NumberOfDirectories++;
 
-                var fi = new FileInfo(files[i]);
-                result.TotalNumberOfBytes += fi.Length;
+
+                    var files = Directory.EnumerateFiles(dir, "*", SearchOption.TopDirectoryOnly);
+
+                    result.NumberOfFiles++;
+
+                    foreach (var file in files)
+                    {
+                        worker.ReportProgress(1);
+
+                        var fi = new FileInfo(file);
+                        result.TotalNumberOfBytes += fi.Length;
+                        result.FilesToCopy.Add(file);
+                    }
+                }
+
             }
-
+            catch (UnauthorizedAccessException ex)
+            {
+                // ignore exception
+            }
 
             doWorkEventArgs.Result = result;
         }

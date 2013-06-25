@@ -19,6 +19,7 @@ namespace CAAB
         public CopyFilesWorker CopyFilesBackgroundWorker { get; set; }
         public ResearchFolderForCopying ResearchFolderBackgroundWorker { get; set; }
 
+        public List<string> FilesToCopy { get; set; }
         private bool ShownHasBeenRun { get; set; }
         public CAAB()
         {
@@ -26,6 +27,8 @@ namespace CAAB
             AppSettings = ApplicationSettings.Instance;
             CopyFilesBackgroundWorker = new CopyFilesWorker();
             ShownHasBeenRun = false;
+
+            FilesToCopy = null;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -80,6 +83,13 @@ namespace CAAB
 
         private void BeginCopyClick(object sender, EventArgs e)
         {
+            if( FilesToCopy == null)
+            {
+                MessageBox.Show("No files to copy");
+                BeginCopy.Enabled = false;
+                return;
+            }
+
             Cursor = Cursors.AppStarting;
             BeginCopy.Enabled = false;
             StopCopyButton.Enabled = true;
@@ -89,6 +99,7 @@ namespace CAAB
             WorkingStatusLabel.Text = "copying...";
             WorkingStatusLabel.Visible = true;
 
+            StatusProgressBar.Style = ProgressBarStyle.Continuous;
             StatusProgressBar.Value = 0;
             StatusProgressBar.Visible = true;
 
@@ -101,6 +112,7 @@ namespace CAAB
                               DestinationFolder = AppSettings.DestinationFolderLocation,
                               SourceFolder = AppSettings.SourceFolderLocation
                           };
+            dto.FilesToCopy.AddRange(FilesToCopy);
             CopyFilesBackgroundWorker.RunWorkerAsync(dto);
         }
 
@@ -157,6 +169,7 @@ namespace CAAB
             ResearchFolderBackgroundWorker.ProgressChanged += BackgroundWorkerOnProgressChanged;
             ResearchFolderBackgroundWorker.RunWorkerCompleted += ResearchFolderBackgroundWorkerOnRunWorkerCompleted;
 
+            StatusProgressBar.Style = ProgressBarStyle.Marquee;
             StatusProgressBar.Value = 0;
             StatusProgressBar.Visible = true;
 
@@ -174,6 +187,9 @@ namespace CAAB
                 TotalMBLabel.Text = String.Format("{0:#,###,##0.00} MB",
                                                   ((double)(resultDTO.TotalNumberOfBytes / 1024.0 / 1024.0)));
                 FolderDetailsPanel.Visible = true;
+
+                FilesToCopy = new List<string>(resultDTO.FilesToCopy.Count());
+                FilesToCopy.AddRange(resultDTO.FilesToCopy);
             }
             WorkingStatusLabel.Visible = false;
             StatusProgressBar.Visible = false;
